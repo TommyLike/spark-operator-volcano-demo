@@ -40,7 +40,14 @@ function check-prerequisites {
   else
     echo -n "found kind, version: " && kind version
   fi
+}
 
+function kind-cluster-up {
+    echo "Installing kind cluster named with integration...."
+    kind create cluster --config "${CURRENT_DIR}/hack/kind-config.yaml" --name "integration"  --wait "200s"
+}
+
+function install-helm {
   echo "checking helm"
   which helm >/dev/null 2>&1
   if [[ $? -ne 0 ]]; then
@@ -50,16 +57,8 @@ function check-prerequisites {
     #TODO: There are some issue with helm's latest version, remove '--version' when it get fixed.
     chmod 700 ${HELM_TEMP_DIR}/get_helm.sh && ${HELM_TEMP_DIR}/get_helm.sh   --version v2.13.0
   else
-    echo -n "found helm, version: " && helm version
+    echo "found helm on local"
   fi
-}
-
-function kind-cluster-up {
-    echo "Installing kind cluster named with integration...."
-    kind create cluster --config "${CURRENT_DIR}/hack/kind-config.yaml" --name "integration"  --wait "200s"
-}
-
-function install-helm {
   echo "installing helm tiller service"
   kubectl create serviceaccount --namespace kube-system tiller
   kubectl create clusterrolebinding tiller-cluster-rule --clusterrole=cluster-admin --serviceaccount=kube-system:tiller
@@ -70,13 +69,14 @@ function install-helm {
 
 function install-spark-operator {
   echo "installing spark operator == 0.3.1"
+  kubectl apply -f "${CURRENT_DIR}/hack/spark-operator-crds/"
   helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-  helm install incubator/sparkoperator --namespace spark-operator --set enableBatchScheduler=true --version 0.3.1 --set operatorVersion=v2.4.4-v1beta2-latest --set enableWebhook=true
+  helm install incubator/sparkoperator --namespace spark-operator --set enableBatchScheduler=true --version 0.3.1 --set operatorImageName=tommylike/spark-operator --set operatorVersion=0.0.1 --set enableWebhook=true
 }
 
 function install-volcano {
     echo "installing volcano 0.2.0"
-    kubectl apply -f "${CURRENT_DIR}/hack/volcano-0.2.yml"
+    kubectl apply -f "${CURRENT_DIR}/hack/volcano-0.2.yaml"
 }
 echo "Preparing environment for spark operator on volcano demos"
 
@@ -92,4 +92,5 @@ install-spark-operator
 
 install-volcano
 echo "all required services has been running up...."
+     "[k8s config]: export KUBECONFIG=\"$(kind get kubeconfig-path --name=kind)\""
 

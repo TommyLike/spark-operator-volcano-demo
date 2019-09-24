@@ -1,4 +1,4 @@
 .EXPORT_ALL_VARIABLES:
 
-run:
+install:
 	./hack/setup-environment.sh

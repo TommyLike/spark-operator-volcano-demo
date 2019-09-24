@@ -70,8 +70,10 @@ function install-helm {
 function install-spark-operator {
   echo "installing spark operator == 0.3.1"
   kubectl apply -f "${CURRENT_DIR}/hack/spark-operator-crds/"
+  kubectl create serviceaccount --namespace default spark
+  kubectl create clusterrolebinding spark-cluster-rule --clusterrole=cluster-admin --serviceaccount=default:spark
   helm repo add incubator http://storage.googleapis.com/kubernetes-charts-incubator
-  helm install incubator/sparkoperator --namespace spark-operator --set enableBatchScheduler=true --version 0.3.1 --set operatorImageName=tommylike/spark-operator --set operatorVersion=0.0.1 --set enableWebhook=true
+  helm install incubator/sparkoperator --namespace spark-operator --set enableBatchScheduler=true --version 0.3.1 --set operatorImageName=tommylike/spark-operator --set operatorVersion=0.0.5 --set enableWebhook=true
 }
 
 function install-volcano {
@@ -91,6 +93,6 @@ install-helm
 install-spark-operator
 
 install-volcano
-echo "all required services has been running up...."
-     "[k8s config]: export KUBECONFIG=\"$(kind get kubeconfig-path --name=kind)\""
+echo "all required services has been running up....
+[k8s config]: export KUBECONFIG=\"$(kind get kubeconfig-path --name=integration)\""
 

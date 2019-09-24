@@ -1,0 +1,146 @@
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-job1-on-queue-default
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["170"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    queue: default
+  driver:
+    cores: 2
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-job2-on-queue-default
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["170"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    queue: default
+  driver:
+    cores: 3
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 3
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-job1-on-queue-default2
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["170"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    queue: default2
+  driver:
+    cores: 2
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-job2-on-queue-default2
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["170"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    queue: default2
+  driver:
+    cores: 3
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 3
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0

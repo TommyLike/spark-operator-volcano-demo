@@ -1,0 +1,6 @@
+apiVersion: scheduling.sigs.dev/v1alpha2
+kind: Queue
+metadata:
+  name: default2
+spec:
+  weight: 1

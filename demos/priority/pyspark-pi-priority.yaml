@@ -1,0 +1,183 @@
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-high-job1
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["100"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    priorityClassName: volcano-high-priority
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-high-job2
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["100"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    priorityClassName: volcano-high-priority
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-high-job3
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["100"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    priorityClassName: volcano-high-priority
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-low-job2
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["100"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    priorityClassName: volcano-low-priority
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+
+---
+apiVersion: "sparkoperator.k8s.io/v1beta2"
+kind: SparkApplication
+metadata:
+  name: pyspark-pi-low-job1
+  namespace: default
+spec:
+  type: Python
+  pythonVersion: "2"
+  mode: cluster
+  image: "gcr.io/spark-operator/spark-py:v2.4.4"
+  imagePullPolicy: Always
+  mainApplicationFile: local:///opt/spark/examples/src/main/python/pi.py
+  arguments: ["100"]
+  sparkVersion: "2.4.0"
+  restartPolicy:
+    type: OnFailure
+    onFailureRetries: 3
+    onFailureRetryInterval: 10
+    onSubmissionFailureRetries: 5
+    onSubmissionFailureRetryInterval: 20
+  batchScheduler: "volcano"
+  batchSchedulerOptions:
+    priorityClassName: volcano-low-priority
+  driver:
+    cores: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0
+    serviceAccount: spark
+  executor:
+    cores: 1
+    instances: 1
+    memory: "512m"
+    labels:
+      version: 2.4.0

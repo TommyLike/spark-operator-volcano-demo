@@ -23,22 +23,42 @@ export CURRENT_DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/..
 
 function check-prerequisites {
   echo "checking prerequisites....."
+  echo "checking go environment"
+  if hash go 2>/dev/null; then
+    echo -n "found go, " && go version
+  else
+    echo "go not installed, exiting."
+    exit 1
+  fi
+
+  if [[ "${GOPATH}" == "" ]]; then
+    echo "GOPATH not set, exiting."
+    exit 1
+  fi
+
   echo "checking kubectl"
-  which kubectl >/dev/null 2>&1
-  if [[ $? -ne 0 ]]; then
+  if hash kubectl 2>/dev/null; then
+    echo -n "found kubectl, " && kubectl version --short --client
+  else
     echo "kubectl not installed, exiting."
     exit 1
+  fi
+
+  echo "checking docker"
+  if hash docker 2>/dev/null; then
+    echo -n "found docker, version: " && docker version
   else
-    echo -n "found kubectl, " && kubectl version --short --client
+     echo "docker not installed, exiting."
+    exit 1
   fi
 
   echo "checking kind"
-  which kind >/dev/null 2>&1
-  if [[ $? -ne 0 ]]; then
+  if hash kind 2>/dev/null; then
+    echo -n "found kind, version: " && kind version
+  else
     echo "installing kind ."
     GO111MODULE="on" go get sigs.k8s.io/kind@v0.4.0
-  else
-    echo -n "found kind, version: " && kind version
+    export PATH=${GOPATH}/bin:${GOROOT}/bin:${PATH}
   fi
 }
 
@@ -49,15 +69,14 @@ function kind-cluster-up {
 
 function install-helm {
   echo "checking helm"
-  which helm >/dev/null 2>&1
-  if [[ $? -ne 0 ]]; then
+  if hash helm 2>/dev/null; then
+    echo "found helm on local"
+  else
     echo "Install helm via script"
     HELM_TEMP_DIR=`mktemp -d`
     curl https://raw.githubusercontent.com/helm/helm/master/scripts/get > ${HELM_TEMP_DIR}/get_helm.sh
     #TODO: There are some issue with helm's latest version, remove '--version' when it get fixed.
     chmod 700 ${HELM_TEMP_DIR}/get_helm.sh && ${HELM_TEMP_DIR}/get_helm.sh   --version v2.13.0
-  else
-    echo "found helm on local"
   fi
   echo "installing helm tiller service"
   kubectl create serviceaccount --namespace kube-system tiller

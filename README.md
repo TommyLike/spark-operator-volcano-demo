@@ -2,6 +2,9 @@
 This repo used to demonstrate the features that volcano can bring to spark operator. It builds the demo environment via
 kind with 1 control plane and 4 workers.
 
+# Demos
+[![Watch the video](https://img.youtube.com/vi/-yXI79dkHUw/maxresdefault.jpg)](https://youtu.be/-yXI79dkHUw)
+
 # Requirements:
 1. go.
 2. git.
